@@ -249,9 +249,9 @@ The FAB (Floating Action Button) adjusts size:
 - Tablet: 56px × 56px
 - Mobile: 52px × 52px
 
-## � Deployment
+## 🚀 Deployment
 
-This application is configured for deployment on Vercel using the included `vercel.json` configuration file. The project uses SQLite for local development, but you may need to configure a different database for production (e.g., PostgreSQL) as Vercel has limitations with SQLite persistence.
+Deployment Link: https://expense-tracker-desir.vercel.app/
 
 ---
 
