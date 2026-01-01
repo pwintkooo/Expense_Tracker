@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Expense Tracker - Home</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+    <style>
+        :root {
+            --primary: #6793AC;
+            --primary-light: #8AB1C7;
+            --secondary: #E4580B;
+            --secondary-light: #FF6D1F;
+            --accent: #114AB1;
+            --accent-light: #1A5FCF;
+            --bg-light: #F0F4F7;
+            --neutral-dark: #2C3E50;
+        }
+
+        body {
+            background: linear-gradient(135deg, #F8FAFB 0%, var(--bg-light) 100%);
+            min-height: 100vh;
+            padding-bottom: 5rem;
+        }
+
+        .navbar-custom {
+            background: linear-gradient(90deg, var(--primary) 0%, var(--primary-light) 100%);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .navbar-brand {
+            font-weight: 700;
+            font-size: 1.5rem;
+            letter-spacing: 0.5px;
+        }
+
+        /* Floating Action Button (FAB) */
+        .btn-add-fab {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, var(--secondary) 0%, var(--secondary-light) 100%);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            box-shadow: 0 8px 20px rgba(228, 88, 11, 0.4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            z-index: 1000;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .btn-add-fab:hover {
+            background: linear-gradient(135deg, var(--secondary-light) 0%, var(--secondary) 100%);
+            color: white;
+            transform: scale(1.1) rotate(0deg);
+            box-shadow: 0 12px 30px rgba(228, 88, 11, 0.5);
+        }
+
+        .btn-add-fab:active {
+            transform: scale(0.95) rotate(0deg);
+        }
+
+        .btn-add-fab::before {
+            content: "Add Expense";
+            position: absolute;
+            right: 70px;
+            background-color: var(--neutral-dark);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            white-space: nowrap;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn-add-fab:hover::before {
+            opacity: 1;
+        }
+
+        /* Responsive adjustments for tablet and mobile */
+        @media (max-width: 992px) {
+            .btn-add-fab {
+                bottom: 1.5rem;
+                right: 1.5rem;
+                width: 56px;
+                height: 56px;
+                font-size: 1.6rem;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .btn-add-fab {
+                bottom: 1.25rem;
+                right: 1.25rem;
+                width: 52px;
+                height: 52px;
+                font-size: 1.5rem;
+            }
+
+            .btn-add-fab::before {
+                display: none;
+            }
+        }
+
+        .card {
+            border: none;
+            border-radius: 15px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            background-color: white;
+        }
+
+        .card-header {
+            background: linear-gradient(90deg, var(--primary) 0%, var(--primary-light) 100%);
+            color: white;
+            border-radius: 15px 15px 0 0 !important;
+            padding: 1.5rem;
+            font-weight: 600;
+        }
+
+        .table thead th {
+            background-color: #E8F1F5;
+            color: var(--neutral-dark);
+            font-weight: 600;
+            border: none;
+            padding: 1rem;
+        }
+
+        .table tbody tr {
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .table tbody tr:hover {
+            background-color: #E8F1F5;
+            transform: scale(1.01);
+            box-shadow: 0 2px 8px rgba(103, 147, 172, 0.2);
+        }
+
+        .table tbody td {
+            padding: 1rem;
+            vertical-align: middle;
+            border-color: #f0f0f0;
+            color: var(--neutral-dark);
+        }
+
+        .table tbody td a {
+            color: var(--accent);
+            text-decoration: none;
+            display: block;
+        }
+
+        .empty-state {
+            padding: 3rem;
+            text-align: center;
+            color: #999;
+        }
+
+        .empty-state p {
+            font-size: 1.1rem;
+            margin: 0;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-right: 1rem;
+        }
+
+        .user-name {
+            color: white;
+            font-weight: 600;
+            padding: 0.5rem 1rem;
+            background-color: rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            font-size: 0.95rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-logout {
+            background-color: rgba(228, 88, 11, 0.9);
+            color: white;
+            font-weight: 600;
+            border: none;
+            padding: 0.5rem 1.2rem;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-logout:hover {
+            background-color: var(--secondary-light);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(228, 88, 11, 0.4);
+        }
+
+        @media (max-width: 768px) {
+            .user-info {
+                flex-direction: column;
+                gap: 0.5rem;
+                margin-right: 0;
+                margin-top: 0.5rem;
+            }
+
+            .navbar-nav {
+                gap: 0.5rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark navbar-custom sticky-top">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">💰 Expense Tracker</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto align-items-center">
+                    {% if current_user %}
+                    <li class="nav-item">
+                        <div class="user-info">
+                            <span class="user-name">
+                                <i class="bi bi-person-circle" style="color:white; font-size:1.5rem;"></i>
+                                {{current_user.userName}}
+                            </span>
+                            <a class="btn-logout" href="{{url_for('logout')}}">Logout</a>
+                        </div>
+                    </li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+    {% for category, message in messages %}
+    <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+        {{ message }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    {% endfor %}
+    {% endif %}
+    {% endwith %}
+
+    <div class="container mt-5 mb-5">
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h3 class="mb-0">📊 My Expenses</h3>
+                        <h5 class="mb-0">Total: <span class="text-warning fw-bold">${{
+                                "%.2f"|format(total) }}</span></h5>
+                    </div>
+                    <div class="card-body p-0">
+                        {% if expenses %}
+                        <div class="table-responsive">
+                            <table class="table mb-0">
+                                <thead>
+                                    <tr>
+                                        <th>No.</th>
+                                        <th>Title</th>
+                                        <th>Amount</th>
+                                        <th>Category</th>
+                                        <th>Date</th>
+                                        <th>Description</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for e in expenses %}
+                                    <tr onclick="window.location='{{ url_for('edit', id=e.expense_id) }}'"
+                                        style="cursor:pointer;">
+                                        <td class="text-decoration-none text-dark">{{ loop.index }}</td>
+                                        <td class="text-decoration-none text-dark">{{ e.title }}</td>
+                                        <td class="text-decoration-none text-dark">{{ e.amount }}</td>
+                                        <td class="text-decoration-none text-dark">{{ e.category }}</td>
+                                        <td class="text-decoration-none text-dark">{{ e.created_at }}</td>
+                                        <td class="text-decoration-none text-dark">{{ e.desc }}</td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                        {% else %}
+                        <div class="empty-state">
+                            <p>📭 No expenses found. Start by adding your first expense!</p>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <a href="{{url_for('add_expense')}}" class="btn-add-fab" aria-label="Add Expense">
+        +
+    </a>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>
