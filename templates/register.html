@@ -166,7 +166,7 @@
                     </div>
                 </form>
                 <div class="login-link">
-                    Already have an account? <a href="{{url_for('login')}}">Login here</a>
+                    Already have an account? <a href="{{url_for('auth.login')}}">Login here</a>
                 </div>
                 {% with messages = get_flashed_messages(with_categories=true) %}
                 {% if messages %}

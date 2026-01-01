@@ -243,7 +243,7 @@
                                 <i class="bi bi-person-circle" style="color:white; font-size:1.5rem;"></i>
                                 {{current_user.userName}}
                             </span>
-                            <a class="btn-logout" href="{{url_for('logout')}}">Logout</a>
+                            <a class="btn-logout" href="{{url_for('auth.logout')}}">Logout</a>
                         </div>
                     </li>
                     {% endif %}
@@ -288,7 +288,7 @@
                                 </thead>
                                 <tbody>
                                     {% for e in expenses %}
-                                    <tr onclick="window.location='{{ url_for('edit', id=e.expense_id) }}'"
+                                    <tr onclick="window.location='{{ url_for('expense.edit', id=e.expense_id) }}'"
                                         style="cursor:pointer;">
                                         <td class="text-decoration-none text-dark">{{ loop.index }}</td>
                                         <td class="text-decoration-none text-dark">{{ e.title }}</td>
@@ -312,7 +312,7 @@
         </div>
     </div>
 
-    <a href="{{url_for('add_expense')}}" class="btn-add-fab" aria-label="Add Expense">
+    <a href="{{url_for('expense.add')}}" class="btn-add-fab" aria-label="Add Expense">
         +
     </a>
 

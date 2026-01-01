@@ -183,14 +183,14 @@
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark navbar-custom sticky-top">
         <div class="container-fluid">
-            <a class="navbar-brand" href="{{url_for('Home')}}">💰 Expense Tracker</a>
+            <a class="navbar-brand" href="{{url_for('expense.home')}}">💰 Expense Tracker</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
-                        <a class="btn btn-back" href="{{url_for('Home')}}">← Back to Home</a>
+                        <a class="btn btn-back" href="{{url_for('expense.home')}}">← Back to Home</a>
                     </li>
                 </ul>
             </div>
@@ -255,7 +255,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-cancel" data-bs-dismiss="modal">Cancel</button>
-                    <a href="{{url_for('delete', id=expense.expense_id)}}" class="btn btn-delete">Delete</a>
+                    <a href="{{url_for('expense.delete', id=expense.expense_id)}}" class="btn btn-delete">Delete</a>
                 </div>
             </div>
         </div>
@@ -270,7 +270,7 @@
         editBtn.addEventListener('click', function () {
             inputs.forEach(el => el.removeAttribute('readonly'));
             saveBtn.removeAttribute('disabled');
-            editBtn.setAttribute('disabled', 'disabled');
+            editBtn.setAttribute('disabled');
         });
     </script>
 </body>

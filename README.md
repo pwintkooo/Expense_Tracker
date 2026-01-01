@@ -9,18 +9,18 @@ A modern, web-based expense tracking application built with Flask and SQLAlchemy
 ## ✨ Features
 
 ### 🔐 User Authentication
-- **Secure Registration** with password strength validation (using zxcvbn)
-- **Encrypted Passwords** using bcrypt hashing
+- **Secure Registration** with email and username
+- **Encrypted Passwords** using Flask-Bcrypt hashing
 - **Session-based Authentication** for secure user sessions
 - **Login/Logout** functionality
 
 ### 💳 Expense Management
-- **Add Expenses** with title, amount, category, date, and description
+- **Add Expenses** with title, amount, category, and description
 - **Edit Expenses** with inline editing interface
 - **Delete Expenses** with confirmation modal
-- **View All Expenses** in a clean, sortable table
+- **View All Expenses** in a clean, organized table
 - **Category Management** with preset categories and custom category option
-- **Automatic Date Tracking** for all expenses
+- **Automatic Timestamp Tracking** (created_at) for all expenses
 
 ### 🎨 Modern UI/UX
 - **Responsive Design** works seamlessly on desktop, tablet, and mobile
@@ -70,18 +70,31 @@ A modern, web-based expense tracking application built with Flask and SQLAlchemy
      source venv/bin/activate
      ```
 
-4. **Install dependencies**
+4. **Create a .env file**
    ```bash
-   pip install flask flask-sqlalchemy flask-bcrypt flask-migrate flask-jwt-extended zxcvbn
+   # Create a .env file in the root directory with:
+   DATABASE_URL=sqlite:///expenses.db
+   SECRET_KEY=your-secret-key-here
    ```
 
-5. **Initialize the database**
+5. **Install dependencies**
    ```bash
-   cd api
+   pip install -r requirements.txt
+   ```
+
+6. **Initialize the database**
+   ```bash
+   flask db init
+   flask db migrate -m "Initial migration"
+   flask db upgrade
+   ```
+
+7. **Run the application**
+   ```bash
    python app.py
    ```
 
-6. **Access the application**
+8. **Access the application**
    - Open your browser and navigate to: `http://127.0.0.1:5000`
 
 ## 📁 Project Structure
@@ -89,24 +102,30 @@ A modern, web-based expense tracking application built with Flask and SQLAlchemy
 ```
 Expense_Tracker_App/
 │
-├── api/
-│   ├── app.py                 # Main Flask application
-│   ├── instance/              # Database instance folder
-│   └── migrations/            # Database migration files
-│       ├── alembic.ini
-│       ├── env.py
-│       ├── script.py.mako
-│       └── versions/          # Migration versions
+├── app.py                     # Main Flask application entry point
+├── requirements.txt           # Python dependencies
+├── vercel.json               # Vercel deployment configuration
+├── README.md                 # This file
 │
-├── templates/                 # HTML templates
-│   ├── index.html            # Home page with expense list
-│   ├── login.html            # Login page
-│   ├── register.html         # Registration page
-│   ├── add_expense.html      # Add expense form
-│   └── edit_expense.html     # Edit expense form
+├── backend/                  # Backend logic
+│   ├── __init__.py
+│   ├── auth_routes.py        # Authentication routes (login, register, logout)
+│   ├── expense_routes.py     # Expense CRUD routes
+│   └── models.py             # SQLAlchemy database models
 │
-├── venv/                     # Virtual environment (not in git)
-└── README.md                 # This file
+├── migrations/               # Database migration files
+│   ├── alembic.ini
+│   ├── env.py
+│   ├── script.py.mako
+│   └── versions/            # Migration versions
+│       └── fb4ee8f0cc4f_initial_migration.py
+│
+└── templates/               # HTML templates
+    ├── index.html          # Home page with expense list
+    ├── login.html          # Login page
+    ├── register.html       # Registration page
+    ├── add_expense.html    # Add expense form
+    └── edit_expense.html   # Edit expense form
 ```
 
 ## 💻 Usage
@@ -114,7 +133,7 @@ Expense_Tracker_App/
 ### 1. Register an Account
 - Navigate to the register page
 - Enter your email, username, and password
-- Password must be strong (minimum score of 3/4)
+- Password will be securely hashed before storage
 - Click "Register" to create your account
 
 ### 2. Login
@@ -160,25 +179,24 @@ Expense_Tracker_App/
 | password  | String  | Not Null (Hashed)    |
 
 ### Expense Table
-| Column      | Type    | Constraints              |
-|-------------|---------|--------------------------|
-| expense_id  | Integer | Primary Key              |
-| title       | String  | Not Null                 |
-| amount      | Float   | Not Null                 |
-| category    | String  | Not Null                 |
-| date        | Date    | Default: Current Date    |
-| desc        | String  | Optional                 |
-| user_id     | Integer | Foreign Key (User)       |
+| Column      | Type     | Constraints              |
+|-------------|----------|--------------------------|
+| expense_id  | Integer  | Primary Key              |
+| title       | String   | Not Null                 |
+| amount      | Float    | Not Null                 |
+| category    | String   | Not Null                 |
+| desc        | String   | Optional                 |
+| created_at  | DateTime | Default: Current Time    |
+| user_id     | Integer  | Foreign Key (User)       |
 
 ## 🛠️ Technologies Used
 
 ### Backend
-- **Flask** - Web framework
+- **Flask 3.1.2** - Web framework
 - **SQLAlchemy** - ORM for database management
-- **Flask-Migrate** - Database migrations
+- **Flask-Migrate** - Database migrations using Alembic
 - **Flask-Bcrypt** - Password hashing
-- **Flask-JWT-Extended** - JWT token management
-- **zxcvbn** - Password strength validation
+- **python-dotenv** - Environment variable management
 - **SQLite** - Database
 
 ### Frontend
@@ -188,11 +206,14 @@ Expense_Tracker_App/
 - **JavaScript** - Interactive features
 - **SVG Icons** - Custom icons
 
-## 🔒 Security Features
+### Development Tools
+- **Vercel** - Deployment platform (configured via vercel.json)
 
-- **Password Hashing**: All passwords are hashed using bcrypt before storage
-- **Password Strength Validation**: Minimum strength score of 3/4 required
-- **Session Management**: Secure session-based authentication
+## 🔒 Security FeaturesFlask-Bcrypt before storage
+- **Session Management**: Secure session-based authentication with Flask sessions
+- **SQL Injection Prevention**: Using SQLAlchemy ORM with parameterized queries
+- **User Isolation**: Each user can only access their own expenses through user_id foreign key
+- **Environment Variables**: Sensitive data stored in .env file (not committed to version control)
 - **SQL Injection Prevention**: Using SQLAlchemy ORM with parameterized queries
 - **User Isolation**: Each user can only access their own expenses
 
@@ -228,9 +249,9 @@ The FAB (Floating Action Button) adjusts size:
 - Tablet: 56px × 56px
 - Mobile: 52px × 52px
 
-## 📝 License
+## � Deployment
 
-This project is open source and available for educational purposes.
+This application is configured for deployment on Vercel using the included `vercel.json` configuration file. The project uses SQLite for local development, but you may need to configure a different database for production (e.g., PostgreSQL) as Vercel has limitations with SQLite persistence.
 
 ---
 
