@@ -212,6 +212,27 @@
             box-shadow: 0 4px 8px rgba(228, 88, 11, 0.4);
         }
 
+        .sort-btn {
+            color: var(--neutral-dark);
+            text-decoration: none;
+            font-size: 1.1rem;
+            line-height: 1;
+            margin-left: 4px;
+            transition: all 0.25s ease-in-out;
+            opacity: 0.6;
+        }
+
+        .sort-btn:hover {
+            color: var(--accent);
+            transform: scale(1.2);
+            opacity: 1;
+        }
+
+        .sort-btn.active {
+            color: var(--accent-light);
+            opacity: 1;
+        }
+
         @media (max-width: 768px) {
             .user-info {
                 flex-direction: column;
@@ -280,7 +301,19 @@
                                     <tr>
                                         <th>No.</th>
                                         <th>Title</th>
-                                        <th>Amount</th>
+                                        <th>
+                                            <span>Amount</span>
+                                            <a href="{{url_for('expense.home', sort_order='asc')}}"
+                                                title="Sort Amount Ascending"
+                                                class="sort-btn {% if sort_order == 'asc' %}active{% endif %}">
+                                                ▲
+                                            </a>
+                                            <a href="{{url_for('expense.home', sort_order='desc')}}"
+                                                title="Sort Amount Descending"
+                                                class="sort-btn {% if sort_order == 'desc' %}active{% endif %}">
+                                                ▼
+                                            </a>
+                                        </th>
                                         <th>Category</th>
                                         <th>Date</th>
                                         <th>Description</th>

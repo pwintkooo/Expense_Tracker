@@ -13,9 +13,19 @@ def home():
         current_user=User.query.get(user_id)
     else:
         return redirect(url_for("auth.register"))
-    expenses = Expense.query.filter_by(user_id=user_id).order_by(Expense.created_at.desc()).all()
+    
+    sort_order = request.args.get("sort_order")
+
+    if not sort_order:
+        expenses = Expense.query.filter_by(user_id=user_id).order_by(Expense.created_at.desc()).all()
+    else:
+        if sort_order=="asc":
+            expenses = Expense.query.filter_by(user_id=user_id).order_by(Expense.amount.asc()).all()
+        elif sort_order=="desc":
+            expenses = Expense.query.filter_by(user_id=user_id).order_by(Expense.amount.desc()).all()
+
     total = sum(e.amount for e in expenses)
-    return render_template("index.html", expenses=expenses, current_user=current_user, total=total)
+    return render_template("index.html", expenses=expenses, current_user=current_user, total=total, sort_order=sort_order)
 
 @expense_bp.route("/add", methods=["GET", "POST"])
 
